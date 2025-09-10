@@ -82,8 +82,8 @@
             <p><strong>Order Number:</strong> {{ $travelOrder->local_travel_order_no }}</p>
             <p><strong>Employee:</strong> {{ $travelOrder->employee_name }}</p>
             <p><strong>Destination:</strong> {{ $travelOrder->farthest_destination }}</p>
-            <p><strong>Purpose:</strong> {{ $travelOrder->purpose_of_travel }}</p>
-            <p><strong>Travel Date:</strong> {{ date('F d, Y', strtotime($travelOrder->inclusive_dates_from)) }} to {{ date('F d, Y', strtotime($travelOrder->inclusive_dates_to)) }}</p>
+            <p><strong>Purpose:</strong> {{ $travelOrder->purpose }}</p>
+            <p><strong>Travel Date:</strong> {{ $travelOrder->date_of_travel_from->format('F d, Y') }} to {{ $travelOrder->date_of_travel_to->format('F d, Y') }}</p>
         </div>
         
         <div class="status-update @if($travelOrder->status == 'approved') status-approved @elseif($travelOrder->status == 'rejected') status-rejected @endif">

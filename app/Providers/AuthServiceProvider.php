@@ -15,6 +15,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Models\TravelOrder' => 'App\Policies\TravelOrderPolicy',
         'App\Models\TravelOrderApproval' => 'App\Policies\TravelOrderApprovalPolicy',
+        'App\Models\WorkflowTemplate' => 'App\Policies\WorkflowTemplatePolicy',
     ];
 
     /**

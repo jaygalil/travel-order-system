@@ -76,18 +76,18 @@
             <h3>Travel Order Details</h3>
             <p><strong>Order Number:</strong> {{ $travelOrder->local_travel_order_no }}</p>
             <p><strong>Employee:</strong> {{ $travelOrder->employee_name }}</p>
-            <p><strong>Position:</strong> {{ $travelOrder->employee_position }}</p>
-            <p><strong>Department:</strong> {{ $travelOrder->office_department }}</p>
+            <p><strong>Position:</strong> {{ $travelOrder->position }}</p>
+            <p><strong>Department:</strong> {{ $travelOrder->division_agency }}</p>
             <p><strong>Destination:</strong> {{ $travelOrder->farthest_destination }}</p>
-            <p><strong>Purpose:</strong> {{ $travelOrder->purpose_of_travel }}</p>
-            <p><strong>Travel Date:</strong> {{ date('F d, Y', strtotime($travelOrder->inclusive_dates_from)) }} to {{ date('F d, Y', strtotime($travelOrder->inclusive_dates_to)) }}</p>
+            <p><strong>Purpose:</strong> {{ $travelOrder->purpose }}</p>
+            <p><strong>Travel Date:</strong> {{ $travelOrder->date_of_travel_from->format('F d, Y') }} to {{ $travelOrder->date_of_travel_to->format('F d, Y') }}</p>
             <p><strong>Current Status:</strong> {{ Str::headline($travelOrder->status) }}</p>
         </div>
         
         <div class="approval-info">
             <h4>Approval Information</h4>
             <p><strong>Approval Level:</strong> {{ $approval->approval_level }}</p>
-            <p><strong>Your Role:</strong> {{ $approval->approver_position }}</p>
+            <p><strong>Your Role:</strong> {{ $approval->approver_title }}</p>
         </div>
         
         @if($approvalUrl)
