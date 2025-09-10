@@ -120,6 +120,30 @@ class TravelOrder extends Model
     {
         return $this->hasOne(TravelOrderApproval::class)->where('status', self::STATUS_PENDING_APPROVAL)->orderBy('sequence');
     }
+    
+    /**
+     * All attachments for this travel order
+     */
+    public function attachments()
+    {
+        return $this->hasMany(TravelOrderAttachment::class)->orderBy('created_at');
+    }
+    
+    /**
+     * Public attachments (visible to approvers)
+     */
+    public function publicAttachments()
+    {
+        return $this->hasMany(TravelOrderAttachment::class)->where('is_public', true)->orderBy('created_at');
+    }
+    
+    /**
+     * Safe attachments only (passed security scan)
+     */
+    public function safeAttachments()
+    {
+        return $this->hasMany(TravelOrderAttachment::class)->where('is_safe', true)->orderBy('created_at');
+    }
 
     /**
      * Generate unique travel order number using sequence table

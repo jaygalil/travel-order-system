@@ -6,6 +6,7 @@ use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\WorkflowTemplateController;
+use App\Http\Controllers\AttachmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,14 +19,25 @@ use App\Http\Controllers\WorkflowTemplateController;
 |
 */
 
-// Public routes
+// Public routes - force redirect to login
 Route::get('/', function () {
-    return redirect()->route('login');
+    // Force redirect to login page, no welcome screen
+    return redirect('/login', 301);
+});
+
+// Alternative root route with explicit login redirect
+Route::get('/welcome', function () {
+    return redirect('/login');
 });
 
 // Email approval routes (no auth required)
 Route::get('/approval/{token}', [ApprovalController::class, 'showEmailApproval'])->name('approval.email.show');
 Route::post('/approval/{token}', [ApprovalController::class, 'processEmailApproval'])->name('approval.email.process');
+
+// Direct email approval actions (no auth required)
+Route::get('/approval/{token}/approve', [ApprovalController::class, 'directEmailApprove'])->name('approval.email.approve');
+Route::get('/approval/{token}/reject', [ApprovalController::class, 'directEmailReject'])->name('approval.email.reject');
+Route::get('/approval/{token}/forward', [ApprovalController::class, 'directEmailForward'])->name('approval.email.forward');
 
 // Authentication routes
 Auth::routes();
@@ -45,6 +57,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/travel-orders/{travelOrder}/pdf', [PDFController::class, 'generatePDF'])->name('travel-orders.pdf');
     Route::get('/travel-orders/{travelOrder}/preview', [PDFController::class, 'previewPDF'])->name('travel-orders.pdf.preview');
     
+    // Attachment Management
+    Route::prefix('travel-orders/{travelOrder}/attachments')->name('travel-orders.attachments.')->group(function () {
+        Route::get('/', [AttachmentController::class, 'index'])->name('index');
+        Route::post('/', [AttachmentController::class, 'upload'])->name('upload');
+        Route::get('/{attachment}/download', [AttachmentController::class, 'download'])->name('download');
+        Route::put('/{attachment}', [AttachmentController::class, 'update'])->name('update');
+        Route::delete('/{attachment}', [AttachmentController::class, 'destroy'])->name('destroy');
+    });
+    
     // Approvals Management
     Route::get('/approvals', [ApprovalController::class, 'index'])->name('approvals.index');
     Route::get('/approvals/{approval}', [ApprovalController::class, 'show'])->name('approvals.show');
@@ -58,14 +79,15 @@ Route::middleware(['auth'])->group(function () {
     
     // Simple API endpoint for user selection
     Route::get('/api/users', function (Illuminate\Http\Request $request) {
-        $query = App\Models\User::select('id', 'name', 'email')
+        $query = App\Models\User::select('id', 'name', 'email', 'position', 'division_agency', 'phone')
             ->where('is_active', true);
         
-        // Search by name or email
+        // Search by name, email, or position
         if ($search = $request->get('q')) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('email', 'LIKE', "%{$search}%");
+                  ->orWhere('email', 'LIKE', "%{$search}%")
+                  ->orWhere('position', 'LIKE', "%{$search}%");
             });
         }
         
@@ -77,6 +99,9 @@ Route::middleware(['auth'])->group(function () {
                           'id' => $user->id,
                           'name' => $user->name,
                           'email' => $user->email,
+                          'position' => $user->position ?? 'N/A',
+                          'division_agency' => $user->division_agency ?? 'N/A',
+                          'phone' => $user->phone ?? '',
                           'display' => $user->name . ' (' . $user->email . ')'
                       ];
                   })

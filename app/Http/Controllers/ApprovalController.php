@@ -212,6 +212,116 @@ class ApprovalController extends Controller
     }
     
     /**
+     * Direct email approve action (no auth required)
+     */
+    public function directEmailApprove($token)
+    {
+        return $this->processDirectEmailAction($token, 'approved', 'Travel order approved successfully!');
+    }
+    
+    /**
+     * Direct email reject action (no auth required)
+     */
+    public function directEmailReject($token)
+    {
+        return $this->processDirectEmailAction($token, 'rejected', 'Travel order rejected.');
+    }
+    
+    /**
+     * Direct email forward action (no auth required)
+     */
+    public function directEmailForward($token)
+    {
+        return $this->processDirectEmailAction($token, 'forwarded', 'Travel order forwarded to next approver.');
+    }
+    
+    /**
+     * Process direct email action (approve/reject/forward) without form
+     */
+    private function processDirectEmailAction($token, $action, $successMessage)
+    {
+        $approval = TravelOrderApproval::where('email_token', $token)
+            ->where('status', 'pending')
+            ->first();
+            
+        if (!$approval || !$approval->canApproveViaEmail($token)) {
+            return $this->showEmailActionResult(
+                'Invalid or Expired Link',
+                'This approval link is invalid or has already been used. Please contact your system administrator if you need assistance.',
+                'error'
+            );
+        }
+        
+        DB::beginTransaction();
+        
+        try {
+            // Load relationships
+            $approval->load(['travelOrder.user', 'travelOrder.preparedBy']);
+            
+            // Process the approval with automatic comments
+            $comments = $this->getAutomaticComment($action, $approval->approver_name);
+            $approval->processAction($action, $comments);
+            
+            // Clear the email token to prevent reuse
+            $approval->update(['email_token' => null]);
+            
+            // If approved/forwarded, send email to next approver
+            if (in_array($action, ['forwarded', 'endorsed', 'verified'])) {
+                $this->sendNextApprovalEmail($approval->travelOrder);
+            }
+            
+            // Send notification to travel order owner
+            $this->sendStatusUpdateEmail($approval);
+            
+            DB::commit();
+            
+            return $this->showEmailActionResult(
+                'Action Completed Successfully',
+                $successMessage . ' The travel order owner and relevant parties have been notified.',
+                'success',
+                $approval
+            );
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Failed to process direct email approval: ' . $e->getMessage());
+            
+            return $this->showEmailActionResult(
+                'Processing Failed',
+                'An error occurred while processing your request. Please try again or contact your system administrator.',
+                'error'
+            );
+        }
+    }
+    
+    /**
+     * Get automatic comment for direct email actions
+     */
+    private function getAutomaticComment($action, $approverName)
+    {
+        $timestamp = Carbon::now()->format('M d, Y g:i A');
+        
+        switch ($action) {
+            case 'approved':
+                return "Approved via email by {$approverName} on {$timestamp}.";
+            case 'rejected':
+                return "Rejected via email by {$approverName} on {$timestamp}.";
+            case 'forwarded':
+                return "Forwarded via email by {$approverName} on {$timestamp}.";
+            default:
+                return "Processed via email by {$approverName} on {$timestamp}.";
+        }
+    }
+    
+    /**
+     * Show result page for email actions
+     */
+    private function showEmailActionResult($title, $message, $type, $approval = null)
+    {
+        return view('approvals.email-action-result', compact('title', 'message', 'type', 'approval'));
+    }
+    
+    /**
      * Send status update email to travel order owner
      */
     private function sendStatusUpdateEmail(TravelOrderApproval $approval)

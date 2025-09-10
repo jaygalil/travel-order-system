@@ -200,6 +200,54 @@
           </div>
         </div>
       @endif
+      
+      <!-- Attachments Section -->
+      <div class="card shadow-sm mt-4">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-paperclip"></i> Attachments</h5>
+        </div>
+        <div class="card-body">
+          @if($travelOrder->attachments && $travelOrder->attachments->count() > 0)
+            <div class="row">
+              @foreach($travelOrder->attachments as $attachment)
+                <div class="col-md-4 mb-3">
+                  <div class="card border-light">
+                    <div class="card-body p-3">
+                      <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-{{ $attachment->icon_class ?: 'file' }} text-muted me-2"></i>
+                        <h6 class="mb-0 text-truncate" title="{{ $attachment->filename }}">
+                          {{ Str::limit($attachment->filename, 20) }}
+                        </h6>
+                      </div>
+                      <div class="text-muted small mb-2">
+                        <div><strong>Type:</strong> {{ $attachment->type ?: 'N/A' }}</div>
+                        <div><strong>Size:</strong> {{ number_format($attachment->file_size / 1024, 2) }} KB</div>
+                        <div><strong>Uploaded:</strong> {{ $attachment->created_at->format('M d, Y') }}</div>
+                      </div>
+                      @if($attachment->description)
+                        <div class="small text-muted mb-2">
+                          <strong>Description:</strong> {{ Str::limit($attachment->description, 50) }}
+                        </div>
+                      @endif
+                      <div class="d-grid">
+                        <a href="{{ route('travel-orders.attachments.download', [$travelOrder, $attachment]) }}" 
+                           class="btn btn-sm btn-outline-primary">
+                          <i class="fas fa-download"></i> Download
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            </div>
+          @else
+            <div class="text-center text-muted py-4">
+              <i class="fas fa-paperclip fa-3x mb-3"></i>
+              <p class="mb-0">No attachments for this travel order.</p>
+            </div>
+          @endif
+        </div>
+      </div>
     </div>
   </div>
 </div>

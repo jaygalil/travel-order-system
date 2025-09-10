@@ -58,7 +58,21 @@
     function loadFallbackUsers() {
       @php
         $fallbackUsers = App\Models\User::select('id', 'name', 'email', 'position', 'division_agency', 'phone', 'employee_id')
-            ->where('is_active', true)->orderBy('name')->get();
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get()
+            ->map(function($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'position' => $user->position ?? 'N/A',
+                    'division_agency' => $user->division_agency ?? 'N/A',
+                    'phone' => $user->phone ?? '',
+                    'employee_id' => $user->employee_id ?? '',
+                    'display' => $user->name . ' (' . $user->email . ')'
+                ];
+            });
       @endphp
       allUsers = @json($fallbackUsers);
       filteredUsers = allUsers;

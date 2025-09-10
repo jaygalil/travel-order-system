@@ -91,10 +91,28 @@
         </div>
         
         @if($approvalUrl)
+        @php
+            $parsedPath = parse_url($approvalUrl, PHP_URL_PATH) ?? '';
+            $extractedToken = $approval->email_token ?? Str::afterLast($parsedPath, '/');
+        @endphp
         <div style="text-align: center; margin: 30px 0;">
-            <p><strong>Click below to approve or reject this travel order:</strong></p>
-            <a href="{{ $approvalUrl }}&action=approve" class="btn">✓ Approve</a>
-            <a href="{{ $approvalUrl }}&action=reject" class="btn btn-danger">✗ Reject</a>
+            <p><strong>Quick Actions - Click to approve or reject directly:</strong></p>
+            <a href="{{ route('approval.email.approve', ['token' => $extractedToken]) }}" 
+               class="btn" 
+               style="background-color: #28a745; color: white; padding: 15px 25px; text-decoration: none; border-radius: 5px; margin: 10px 5px; display: inline-block; font-weight: bold;">✓ APPROVE</a>
+            <a href="{{ route('approval.email.reject', ['token' => $extractedToken]) }}" 
+               class="btn btn-danger" 
+               style="background-color: #dc3545; color: white; padding: 15px 25px; text-decoration: none; border-radius: 5px; margin: 10px 5px; display: inline-block; font-weight: bold;">✗ REJECT</a>
+            <a href="{{ route('approval.email.forward', ['token' => $extractedToken]) }}" 
+               class="btn" 
+               style="background-color: #007bff; color: white; padding: 15px 25px; text-decoration: none; border-radius: 5px; margin: 10px 5px; display: inline-block; font-weight: bold;">→ FORWARD</a>
+        </div>
+        
+        <div style="background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: center;">
+            <p style="margin: 0; font-size: 14px; color: #495057;"><strong>Need more options?</strong><br>
+            For detailed review or to add comments, use the full approval form:</p>
+            <a href="{{ $approvalUrl }}" 
+               style="background-color: #6c757d; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 10px; display: inline-block;">View Full Form</a>
         </div>
         @endif
         
