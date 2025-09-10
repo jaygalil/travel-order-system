@@ -1,0 +1,281 @@
+// =============================================================================
+// Typography System
+// =============================================================================
+
+// Font Families
+// -----------------------------------------------------------------------------
+:root {
+  // Google Fonts - Inter for body text, Poppins for headings
+  --font-sans: 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-heading: 'Poppins', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', monospace;
+
+  // Font Weights
+  --font-weight-thin: 100;
+  --font-weight-extra-light: 200;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi-bold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
+  --font-weight-black: 900;
+
+  // Font Sizes (Using fluid typography)
+  --text-xs: clamp(0.75rem, 0.75rem + 0vw, 0.75rem);        /* 12px */
+  --text-sm: clamp(0.875rem, 0.875rem + 0vw, 0.875rem);     /* 14px */
+  --text-base: clamp(1rem, 1rem + 0vw, 1rem);               /* 16px */
+  --text-lg: clamp(1.125rem, 1.125rem + 0vw, 1.125rem);     /* 18px */
+  --text-xl: clamp(1.25rem, 1.25rem + 0vw, 1.25rem);        /* 20px */
+  --text-2xl: clamp(1.5rem, 1.4rem + 0.5vw, 1.5rem);        /* 24px */
+  --text-3xl: clamp(1.875rem, 1.75rem + 0.625vw, 1.875rem); /* 30px */
+  --text-4xl: clamp(2.25rem, 2rem + 1.25vw, 2.25rem);       /* 36px */
+  --text-5xl: clamp(3rem, 2.5rem + 2.5vw, 3rem);            /* 48px */
+  --text-6xl: clamp(3.75rem, 3rem + 3.75vw, 3.75rem);       /* 60px */
+
+  // Line Heights
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  // Letter Spacing
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+}
+
+// Base Typography Styles
+// -----------------------------------------------------------------------------
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+// Headings
+// -----------------------------------------------------------------------------
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  letter-spacing: var(--tracking-tight);
+}
+
+h1, .h1 {
+  font-size: var(--text-5xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tighter);
+}
+
+h2, .h2 {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-weight-bold);
+}
+
+h3, .h3 {
+  font-size: var(--text-3xl);
+}
+
+h4, .h4 {
+  font-size: var(--text-2xl);
+}
+
+h5, .h5 {
+  font-size: var(--text-xl);
+}
+
+h6, .h6 {
+  font-size: var(--text-lg);
+}
+
+// Text Utilities
+// -----------------------------------------------------------------------------
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+.text-xl { font-size: var(--text-xl); }
+.text-2xl { font-size: var(--text-2xl); }
+.text-3xl { font-size: var(--text-3xl); }
+.text-4xl { font-size: var(--text-4xl); }
+.text-5xl { font-size: var(--text-5xl); }
+.text-6xl { font-size: var(--text-6xl); }
+
+// Font Weight Utilities
+.font-thin { font-weight: var(--font-weight-thin); }
+.font-extra-light { font-weight: var(--font-weight-extra-light); }
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semi-bold { font-weight: var(--font-weight-semi-bold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-extra-bold { font-weight: var(--font-weight-extra-bold); }
+.font-black { font-weight: var(--font-weight-black); }
+
+// Line Height Utilities
+.leading-none { line-height: var(--leading-none); }
+.leading-tight { line-height: var(--leading-tight); }
+.leading-snug { line-height: var(--leading-snug); }
+.leading-normal { line-height: var(--leading-normal); }
+.leading-relaxed { line-height: var(--leading-relaxed); }
+.leading-loose { line-height: var(--leading-loose); }
+
+// Letter Spacing Utilities
+.tracking-tighter { letter-spacing: var(--tracking-tighter); }
+.tracking-tight { letter-spacing: var(--tracking-tight); }
+.tracking-normal { letter-spacing: var(--tracking-normal); }
+.tracking-wide { letter-spacing: var(--tracking-wide); }
+.tracking-wider { letter-spacing: var(--tracking-wider); }
+.tracking-widest { letter-spacing: var(--tracking-widest); }
+
+// Text Color Utilities
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-muted { color: var(--text-muted); }
+.text-inverse { color: var(--text-inverse); }
+
+// Text Transform Utilities
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+
+// Text Decoration Utilities
+.underline { text-decoration: underline; }
+.no-underline { text-decoration: none; }
+.line-through { text-decoration: line-through; }
+
+// Paragraph Styling
+p {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Links
+a {
+  color: var(--primary-600);
+  text-decoration: none;
+  transition: color var(--duration-200) var(--ease-out);
+
+  &:hover,
+  &:focus {
+    color: var(--primary-700);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+  }
+}
+
+// Lists
+ul, ol {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-5);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+
+  li {
+    margin-bottom: var(--space-1);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Blockquotes
+blockquote {
+  margin: var(--space-6) 0;
+  padding-left: var(--space-4);
+  border-left: 4px solid var(--primary-500);
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+}
+
+// Code
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--neutral-100);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--danger-600);
+}
+
+pre {
+  font-family: var(--font-mono);
+  background-color: var(--neutral-100);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+
+  code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+  }
+}
+
+// Small text
+small, .small {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+// Mark/highlight
+mark {
+  background-color: var(--warning-200);
+  padding: var(--space-0-5) var(--space-1);
+  border-radius: var(--radius-sm);
+}
+
+// Bootstrap Override Variables for Typography
+// -----------------------------------------------------------------------------
+$font-family-sans-serif: var(--font-sans);
+$font-family-monospace: var(--font-mono);
+
+// Headings
+$headings-font-family: var(--font-heading);
+$headings-font-weight: var(--font-weight-semi-bold);
+$headings-line-height: var(--leading-tight);
+$headings-color: var(--text-primary);
+
+// Body
+$font-size-base: var(--text-base);
+$font-weight-base: var(--font-weight-normal);
+$line-height-base: var(--leading-normal);
+
+// Links
+$link-color: var(--primary-600);
+$link-hover-color: var(--primary-700);
+$link-decoration: none;
+$link-hover-decoration: underline;
