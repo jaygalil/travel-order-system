@@ -5,58 +5,82 @@
     <title>Travel Order {{ $travelOrder->local_travel_order_no }}</title>
     <style>
         body {
-            font-family: 'Times New Roman', serif;
-            font-size: 11px;
+            font-family: 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif;
+            font-size: 12px;
             margin: 0;
             padding: 20px;
-            line-height: 1.2;
+            line-height: 1.4;
+            color: #000;
         }
         
         .header {
+            position: relative;
             text-align: center;
             border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            padding-bottom: 20px;
+            padding-top: 25px;
+            margin-bottom: 25px;
+            min-height: 120px;
         }
         
         .logo {
-            float: left;
-            width: 60px;
-            height: 60px;
-            margin-right: 15px;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            width: 70px;
+            height: 70px;
         }
         
         .qr-code {
-            float: right;
-            width: 60px;
-            height: 60px;
-            margin-left: 15px;
+            position: absolute;
+            right: 20px;
+            top: 25px;
+            width: 70px;
+            height: 70px;
             border: 1px solid #000;
+            z-index: 5;
         }
         
         .header-text {
-            margin: 0 75px;
+            margin: 0 100px;
+            padding-top: 10px;
         }
         
         .header h1 {
-            font-size: 14px;
+            font-size: 16px;
             margin: 5px 0;
-            font-weight: bold;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
         
         .header h2 {
-            font-size: 12px;
+            font-size: 14px;
             margin: 3px 0;
-            font-weight: normal;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        
+        .header h3 {
+            font-size: 13px;
+            margin: 2px 0;
+            font-weight: 600;
+            letter-spacing: 0.2px;
         }
         
         .order-info {
             text-align: right;
-            margin-bottom: 20px;
-            clear: both;
+            margin-bottom: 25px;
+            margin-top: 10px;
+            padding-top: 10px;
         }
         
         .order-info strong {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+        }
+        
+        .order-info {
             font-size: 12px;
         }
         
@@ -77,14 +101,21 @@
         }
         
         .form-label {
-            font-weight: bold;
-            margin-bottom: 2px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 11px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .form-value {
-            border-bottom: 1px solid #000;
-            min-height: 18px;
-            padding: 2px 5px;
+            border-bottom: 1.5px solid #000;
+            min-height: 22px;
+            padding: 5px 7px;
+            font-weight: 500;
+            background-color: #fafafa;
+            font-size: 12px;
         }
         
         .full-width {
@@ -99,7 +130,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 10px;
+            font-size: 11px;
         }
         
         .approval-table th,
@@ -111,23 +142,35 @@
         }
         
         .approval-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
+            background-color: #e8f4f8;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        
+        .approval-table td {
+            font-size: 11px;
+            font-weight: 400;
         }
         
         .signature-section {
             text-align: center;
             padding: 30px 0 10px 0;
+            font-size: 13px;
+            font-weight: 600;
         }
         
         .status-badge {
             position: absolute;
-            top: 20px;
+            top: 120px;
             right: 20px;
             padding: 5px 10px;
             border: 2px solid;
             font-weight: bold;
             font-size: 12px;
+            background-color: white;
+            z-index: 10;
         }
         
         .status-approved {
@@ -177,25 +220,34 @@
     @endif
 
     <!-- Header -->
-    <div class="header clearfix">
-        <!-- Placeholder for logo -->
+    <div class="header">
+        <!-- Department Logo -->
         <div class="logo">
-            <div style="width: 60px; height: 60px; border: 1px solid #000; text-align: center; line-height: 60px; font-size: 8px;">
-                LOGO
-            </div>
+            @if(isset($logoBase64) && $logoBase64)
+                <img src="{{ $logoBase64 }}" alt="DICT Logo" style="width: 70px; height: 70px; object-fit: contain;">
+            @else
+                <div style="width: 70px; height: 70px; border: 2px solid #000; text-align: center; line-height: 35px; font-size: 10px; background-color: #f9f9f9; font-weight: bold;">
+                    DICT<br>LOGO
+                </div>
+            @endif
         </div>
         
-        <!-- QR Code placeholder -->
+        <!-- QR Code -->
         <div class="qr-code">
-            <div style="width: 58px; height: 58px; text-align: center; line-height: 58px; font-size: 8px;">
-                QR CODE
-            </div>
+            @if(isset($qrCodeBase64))
+                <img src="{{ $qrCodeBase64 }}" alt="QR Code" style="width: 70px; height: 70px; object-fit: contain;">
+            @else
+                <div style="width: 68px; height: 68px; text-align: center; line-height: 68px; font-size: 8px; border: 1px solid #ccc;">
+                    QR CODE
+                </div>
+            @endif
         </div>
         
         <div class="header-text">
             <h1>REPUBLIC OF THE PHILIPPINES</h1>
             <h2>DEPARTMENT OF INFORMATION AND</h2>
             <h2>COMMUNICATIONS TECHNOLOGY</h2>
+            <h3>REGIONAL OFFICE II</h3>
         </div>
     </div>
     
@@ -209,7 +261,7 @@
     
     <!-- Authority to Travel -->
     <div class="form-section">
-        <p><strong>Authority to Travel is hereby granted to:</strong></p>
+        <p style="font-size: 13px; font-weight: 600;"><strong>Authority to Travel is hereby granted to:</strong></p>
     </div>
     
     <!-- Employee Information -->
@@ -263,7 +315,7 @@
     
     <!-- TEV Claims -->
     <div class="form-section">
-        <p><strong>TEV claims:</strong></p>
+        <p style="font-size: 13px; font-weight: 600;"><strong>TEV claims:</strong></p>
         <div class="form-row">
             <div class="form-cell half-width">
                 <div class="form-label">Name</div>
@@ -284,13 +336,13 @@
     
     <!-- Report Submission -->
     <div class="form-section">
-        <p>A report of your travel must be submitted to the Agency Head/Supervising Official within 7 days from completion of travel.</p>
-        <p>Liquidation of each cash advance should be made after the issuance of travel authority by the Regional Director.</p>
+        <p style="font-size: 12px;">A report of your travel must be submitted to the Agency Head/Supervising Official within 7 days from completion of travel.</p>
+        <p style="font-size: 12px;">Liquidation of each cash advance should be made after the issuance of travel authority by the Regional Director.</p>
     </div>
     
     <!-- Travel Approval Log -->
     <div class="form-section">
-        <p><strong>Travel Approval Log:</strong></p>
+        <p style="font-size: 13px; font-weight: 600;"><strong>Travel Approval Log:</strong></p>
         <table class="approval-table">
             <thead>
                 <tr>
@@ -303,13 +355,23 @@
             <tbody>
                 @foreach($travelOrder->approvals as $approval)
                 <tr>
-                    <td>{{ $approval->approver_title }}</td>
-                    <td>{{ $approval->approver_name }}</td>
-                    <td style="text-transform: capitalize;">{{ $approval->status }}</td>
-                    <td>
+                    <td style="text-align: left;">{{ $approval->approver_title }}</td>
+                    <td style="text-align: left;">{{ $approval->approver_name }}</td>
+                    <td style="text-transform: capitalize; text-align: center; font-weight: 600;">
+                        @if($approval->status == 'approved')
+                            <span style="color: #28a745;">{{ ucfirst($approval->status) }}</span>
+                        @elseif($approval->status == 'rejected')
+                            <span style="color: #dc3545;">{{ ucfirst($approval->status) }}</span>
+                        @else
+                            <span style="color: #ffc107;">{{ ucfirst($approval->status) }}</span>
+                        @endif
+                    </td>
+                    <td style="text-align: center;">
                         @if($approval->action_date)
                             {{ $approval->action_date->format('M d, Y') }}<br>
                             {{ $approval->action_date->format('g:i A') }}
+                        @else
+                            -
                         @endif
                     </td>
                 </tr>
