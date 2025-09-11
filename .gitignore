@@ -13,3 +13,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
+# Large deployment files
+*.zip
+WOw2.zip
+WOW.zip

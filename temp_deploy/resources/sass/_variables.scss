@@ -1,0 +1,61 @@
+// Body
+$body-bg: #fafafa;
+
+// Typography - Modern font stack
+$font-family-sans-serif: 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif;
+$font-family-monospace: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Courier New', monospace;
+$headings-font-family: 'Poppins', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif;
+$font-size-base: 1rem;
+$line-height-base: 1.5;
+
+// Bootstrap color overrides
+$primary: #0284c7;
+$secondary: #9333ea;
+$success: #16a34a;
+$info: #0ea5e9;
+$warning: #f59e0b;
+$danger: #dc2626;
+$light: #f5f5f5;
+$dark: #262626;
+
+// Spacing and layout
+$spacer: 1rem;
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+// Border and shadows
+$border-radius: 0.375rem;
+$border-radius-sm: 0.125rem;
+$border-radius-lg: 0.5rem;
+$box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+$box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
+// Cards
+$card-border-radius: 1rem;
+$card-border-color: #f5f5f5;
+$card-bg: rgba(255, 255, 255, 0.95);
+
+// Forms
+$input-border-radius: 0.5rem;
+$input-border-color: #e5e5e5;
+$input-focus-border-color: #0ea5e9;
+$input-bg: rgba(255, 255, 255, 0.95);
+
+// Buttons
+$btn-border-radius: 0.5rem;
+$btn-font-weight: 500;
+
+// Navigation
+$navbar-padding-y: 1rem;
+$navbar-brand-font-size: 1.25rem;
+
+// Tables
+$table-bg: rgba(255, 255, 255, 0.95);
+$table-border-color: #f5f5f5;
+$table-hover-bg: #f5f5f5;

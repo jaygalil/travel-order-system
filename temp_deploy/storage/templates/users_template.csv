@@ -1,0 +1,9 @@
+name,email,position,role,sequence,approver_title
+John Doe,john.doe@example.com,Provincial Officer,approver,1,Provincial Officer
+Jane Smith,jane.smith@example.com,Human Resources Manager,approver,2,Human Resources
+Bob Johnson,bob.johnson@example.com,Department Head,approver,3,Recommending Approval
+Alice Brown,alice.brown@example.com,Finance Manager,approver,4,Verified By
+Charlie Wilson,charlie.wilson@example.com,Director,approver,5,Approved By
+Mike Davis,mike.davis@employee.com,Staff,employee,,
+Sarah Connor,sarah.connor@employee.com,Clerk,employee,,
+Tom Anderson,tom.anderson@admin.com,IT Admin,admin,,
