@@ -123,13 +123,31 @@ class ApprovalController extends Controller
      */
     public function processEmailApproval(Request $request, $token)
     {
+        // Debug logging
+        \Log::info('Email approval processing started', [
+            'token' => $token,
+            'request_data' => $request->all(),
+            'method' => $request->method()
+        ]);
+        
         $approval = TravelOrderApproval::where('email_token', $token)
             ->where('status', 'pending')
             ->firstOrFail();
             
         if (!$approval->canApproveViaEmail($token)) {
+            \Log::error('Invalid approval token or conditions', [
+                'token' => $token,
+                'approval_id' => $approval->id,
+                'approval_status' => $approval->status,
+                'email_sent_at' => $approval->email_sent_at
+            ]);
             abort(404, 'Invalid or expired approval link.');
         }
+        
+        \Log::info('Validation input', [
+            'action' => $request->input('action'),
+            'comments' => $request->input('comments')
+        ]);
         
         $request->validate([
             'action' => 'required|in:forwarded,endorsed,verified,approved,rejected',

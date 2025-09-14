@@ -56,7 +56,8 @@
             <div class="card-body p-4">
                 @if ($errors->any())
                     <div class="alert alert-danger">
-                        <ul class="mb-0">
+                        <strong>Validation Errors:</strong>
+                        <ul class="mb-0 mt-2">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -66,7 +67,13 @@
 
                 @if (session('error'))
                     <div class="alert alert-danger">
-                        {{ session('error') }}
+                        <strong>Error:</strong> {{ session('error') }}
+                    </div>
+                @endif
+                
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        <strong>Success:</strong> {{ session('success') }}
                     </div>
                 @endif
 
@@ -113,8 +120,15 @@
                         <strong>Approver Name:</strong> {{ $approval->approver_name }}
                     </div>
 
-                    <form action="{{ route('approval.email.process', $token) }}" method="POST">
+                    <form action="{{ route('approval.email.process', $token) }}" method="POST" id="approvalForm">
                         @csrf
+                        <input type="hidden" name="debug" value="1">
+                        <!-- Debug info -->
+                        <div class="d-none" id="debug-info">
+                            <p>Form Action: {{ route('approval.email.process', $token) }}</p>
+                            <p>Token: {{ $token }}</p>
+                            <p>CSRF Token: {{ csrf_token() }}</p>
+                        </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="action" class="form-label"><strong>Select Action *</strong></label>
@@ -153,9 +167,12 @@
                                 placeholder="Add any comments, remarks, or reasons for your decision..."></textarea>
                         </div>
 
-                        <div class="d-grid">
+                        <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="fas fa-paper-plane"></i> Submit Decision
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="showDebugInfo()">
+                                <i class="fas fa-bug"></i> Show Debug Info
                             </button>
                         </div>
                     </form>
@@ -180,6 +197,73 @@
             btn.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
             });
+        });
+        
+        // Add form submission debugging
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const selectedAction = document.querySelector('input[name="action"]:checked');
+            
+            if (!selectedAction) {
+                e.preventDefault();
+                alert('Please select an action before submitting.');
+                return false;
+            }
+            
+            // Show loading state
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
+            
+            // Log for debugging
+            console.log('Form submitted with action:', selectedAction.value);
+            console.log('Form action URL:', this.action);
+            console.log('Comments:', document.getElementById('comments').value);
+            
+            // Re-enable button after 30 seconds as fallback
+            setTimeout(function() {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 30000);
+        });
+        
+        // Add click handlers to action buttons for better UX
+        document.querySelectorAll('input[name="action"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                console.log('Action selected:', this.value);
+            });
+        });
+        
+        // Debug function
+        function showDebugInfo() {
+            const debugInfo = document.getElementById('debug-info');
+            debugInfo.classList.toggle('d-none');
+            
+            const form = document.getElementById('approvalForm');
+            const formData = new FormData(form);
+            
+            console.log('=== FORM DEBUG INFO ===');
+            console.log('Form action:', form.action);
+            console.log('Form method:', form.method);
+            
+            console.log('Form data:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key + ':', value);
+            }
+            
+            const selectedAction = document.querySelector('input[name="action"]:checked');
+            console.log('Selected action:', selectedAction ? selectedAction.value : 'None');
+            
+            alert('Debug info has been logged to console. Press F12 to view.');
+        }
+        
+        // Add error handling for AJAX if needed
+        window.addEventListener('beforeunload', function(e) {
+            const submitBtn = document.querySelector('button[type="submit"]');
+            if (submitBtn.disabled) {
+                e.preventDefault();
+                e.returnValue = 'Form is being processed. Are you sure you want to leave?';
+            }
         });
     </script>
 </body>
