@@ -84,9 +84,15 @@
             <p><strong>Department:</strong> {{ $travelOrder->division_agency }}</p>
             <p><strong>Destination:</strong> {{ $travelOrder->farthest_destination }}</p>
             <p><strong>Purpose:</strong> {{ $travelOrder->purpose }}</p>
-            <p><strong>Travel Date:</strong> {{ $travelOrder->date_of_travel_from->format('F d, Y') }} to {{ $travelOrder->date_of_travel_to->format('F d, Y') }}</p>
-            <p><strong>Current Status:</strong> {{ Str::headline($travelOrder->status) }}</p>
-            <p><strong>Created:</strong> {{ $travelOrder->created_at->format('F d, Y g:i A') }}</p>
+            <p><strong>Travel Date:</strong> 
+                @if($travelOrder->date_of_travel_from && $travelOrder->date_of_travel_to)
+                    {{ $travelOrder->date_of_travel_from->format('F d, Y') }} to {{ $travelOrder->date_of_travel_to->format('F d, Y') }}
+                @else
+                    Not specified
+                @endif
+            </p>
+            <p><strong>Current Status:</strong> {{ Str::headline($travelOrder->status ?? 'Draft') }}</p>
+            <p><strong>Created:</strong> {{ $travelOrder->created_at ? $travelOrder->created_at->format('F d, Y g:i A') : 'Just now' }}</p>
         </div>
         
         @if($travelOrder->status == 'draft')
