@@ -186,6 +186,7 @@ class ApprovalController extends Controller
      */
     private function sendNextApprovalEmail(TravelOrder $travelOrder)
     {
+        // Get the next pending approval in sequence order
         $nextApproval = $travelOrder->approvals()
             ->where('status', 'pending')
             ->orderBy('sequence')
@@ -195,19 +196,44 @@ class ApprovalController extends Controller
             $token = $nextApproval->generateEmailToken();
             $approvalUrl = route('approval.email.show', ['token' => $token]);
             
-            // Send email if approver has email
+            // Send email if approver has email - check both approverUser and email field
+            $emailAddress = null;
             if ($nextApproval->approverUser && $nextApproval->approverUser->email) {
+                $emailAddress = $nextApproval->approverUser->email;
+            }
+            
+            if ($emailAddress) {
                 try {
-                    Mail::to($nextApproval->approverUser->email)
+                    Mail::to($emailAddress)
                         ->send(new TravelOrderApprovalRequest($travelOrder, $nextApproval, $approvalUrl));
                         
                     $nextApproval->update(['email_sent_at' => Carbon::now()]);
+                    
+                    \Log::info('Next approval email sent successfully', [
+                        'travel_order_id' => $travelOrder->id,
+                        'approval_id' => $nextApproval->id,
+                        'approver_name' => $nextApproval->approver_name,
+                        'email_address' => $emailAddress
+                    ]);
                 } catch (\Exception $e) {
-                    \Log::error('Failed to send next approval email: ' . $e->getMessage());
+                    \Log::error('Failed to send next approval email', [
+                        'travel_order_id' => $travelOrder->id,
+                        'approval_id' => $nextApproval->id,
+                        'error' => $e->getMessage()
+                    ]);
                 }
             } else {
-                \Log::warning('No email address for next approver: ' . $nextApproval->approver_name);
+                \Log::warning('No email address for next approver', [
+                    'travel_order_id' => $travelOrder->id,
+                    'approval_id' => $nextApproval->id,
+                    'approver_name' => $nextApproval->approver_name,
+                    'approver_user_id' => $nextApproval->approver_user_id
+                ]);
             }
+        } else {
+            \Log::info('No more pending approvals found', [
+                'travel_order_id' => $travelOrder->id
+            ]);
         }
     }
     

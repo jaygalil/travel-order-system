@@ -44,7 +44,7 @@
             <div class="container-fluid">
                 <!-- Brand -->
                 <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-                    <i class="fas fa-plane-departure me-2 text-primary-600"></i>
+                    <i class="fas fa-bus me-2 text-primary-600"></i>
                     <span class="fw-bold">{{ config('app.name', 'Travel Order System') }}</span>
                 </a>
 
@@ -118,10 +118,12 @@
                             <li class="nav-item dropdown me-3">
                                 <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-bell"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        3
-                                        <span class="visually-hidden">unread messages</span>
-                                    </span>
+                                    @if(isset($pendingApprovalCount) && $pendingApprovalCount > 0)
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{ $pendingApprovalCount }}
+                                            <span class="visually-hidden">pending approvals</span>
+                                        </span>
+                                    @endif
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><h6 class="dropdown-header">Recent Notifications</h6></li>
@@ -175,7 +177,7 @@
         <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
             <div class="offcanvas-header glass">
                 <h5 class="offcanvas-title" id="mobileNavLabel">
-                    <i class="fas fa-plane-departure me-2 text-primary"></i>
+                    <i class="fas fa-bus me-2 text-primary"></i>
                     {{ config('app.name', 'Travel Order System') }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -245,19 +247,6 @@
                                 @csrf
                             </form>
                         </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt"></i> Login
-                            </a>
-                        </li>
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">
-                                    <i class="fas fa-user-plus"></i> Register
-                                </a>
-                            </li>
-                        @endif
                     @endauth
                 </ul>
             </div>

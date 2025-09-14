@@ -92,9 +92,8 @@
         
         @if($approvalUrl)
         <div style="text-align: center; margin: 30px 0;">
-            <p><strong>Click below to approve or reject this travel order:</strong></p>
-            <a href="{{ $approvalUrl }}&action=approve" class="btn">✓ Approve</a>
-            <a href="{{ $approvalUrl }}&action=reject" class="btn btn-danger">✗ Reject</a>
+            <p><strong>Click the button below to review and process this approval:</strong></p>
+            <a href="{{ $approvalUrl }}" class="btn">Review & Process Approval</a>
         </div>
         @endif
         

@@ -118,7 +118,7 @@ class TravelOrder extends Model
      */
     public function currentApproval()
     {
-        return $this->hasOne(TravelOrderApproval::class)->where('status', self::STATUS_PENDING_APPROVAL)->orderBy('sequence');
+        return $this->hasOne(TravelOrderApproval::class)->where('status', 'pending')->orderBy('sequence');
     }
 
     /**
@@ -138,7 +138,7 @@ class TravelOrder extends Model
     public function isFullyApproved()
     {
         return $this->status === self::STATUS_APPROVED && 
-               $this->approvals()->where('status', self::STATUS_PENDING_APPROVAL)->doesntExist();
+               $this->approvals()->where('status', 'pending')->doesntExist();
     }
 
     /**
